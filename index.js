@@ -17,7 +17,7 @@ logger.add(logger.transports.Console, {
 logger.level = 'debug';
 
 // Default variables
-var DEFAULT_PORT = 8000;
+var DEFAULT_PORT = 8080;
 var DEFAULT_ROUTE = '/webhook';
 
 // Commander configuration
