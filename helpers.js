@@ -22,13 +22,13 @@ exports.validate = function(parameter, error_message) {
 /**
 * @function 
 * @name hash
-* @param {json} body - JSON body of the hook POST request
+* @param {string} body - Stringified JSON body of the hook POST request
 * @param {string} secret - Secret from conf, to compute hash
 * @returns {string} Return sha1 hash of the POST payload
 **/
-exports.hash = function(body, secret) {
+exports.hash = function(stringified_body, secret) {
 	hash = crypto.createHmac('sha1', secret)
-					.update(JSON.stringify(body))
+					.update(stringified_body)
 					.digest('hex')
 
 	return 'sha1=' + hash;

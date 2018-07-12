@@ -52,7 +52,7 @@ app.use( bodyParser.json() );
 app.post(commander.route, function (req, res) {
 
   var github_hash = req.get('X-Hub-Signature');
-  var hash = helpers.hash(req.body, secret);
+  var hash = helpers.hash(JSON.stringify(req.body), secret);
 
   if(helpers.hashes_matches(hash, github_hash)) {
 	const { stdout, stderr, code } = shell.exec(commander.script, { silent: true });
