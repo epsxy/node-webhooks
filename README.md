@@ -1,4 +1,5 @@
-# NODEJS WEBHOOKS
+# NODEJS WEBHOOKS ![Travis build](https://api.travis-ci.com/epsxy/node-webhooks.svg?branch=master)
+
 
 Securely use github webhooks. Node server to listen on a spefic port/route. Check if message is correctly signed and trigger a bash script. 
 
