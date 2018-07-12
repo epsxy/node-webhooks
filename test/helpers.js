@@ -1,8 +1,10 @@
 var helpers = require('./../helpers.js');
 var should = require('chai').should();
+var expect = require('chai').expect();
+var mock = require('mock-fs');
 
 describe('Test helpers', function() {
-	describe('Test validation', function() {
+	describe('Test string validation', function() {
 
 		it('Should return invalid if undefined', function() {
 			helpers
@@ -25,6 +27,79 @@ describe('Test helpers', function() {
 				.equal(true);
 		});
 
+	});
+
+	describe('Test input whole validation', function() {
+			it('Should report that conf and script parameters were not provided', function() {
+			var { is_valid, messages } = helpers.validate_input(undefined,  '');
+
+			is_valid.should.equal(false);
+			messages.length.should.equal(2);
+			messages
+				.should
+				.contains('Configuration file not provided', 'Script file not provided')
+		});
+		
+		it('Should report nothing if everything is alright', function() {
+			mock({
+				'temp': {
+					'conf': '{"secret": "password"}', 
+					'script': ''
+				}
+			});
+
+			var { is_valid, messages } = helpers.validate_input('temp/conf', 'temp/script');
+
+			is_valid.should.equal(true);
+			messages.length.should.equal(0);
+			mock.restore();
+		});
+
+		it('Should report that conf file does not exist', function() {
+			mock({
+				'temp': {
+					'script': ''
+				}
+			});
+
+			var { is_valid, messages } = helpers.validate_input('temp/conf', 'temp/script');
+
+			is_valid.should.equal(false);
+			messages.length.should.equal(1);
+			messages.should.contains('Unable to find file: temp/conf');
+			mock.restore();
+		});
+
+		it('Should report that script file does not exist', function() {
+			mock({
+				'temp': {
+					'conf': '{"secret": "password"}'
+				}
+			});
+
+			var { is_valid, messages } = helpers.validate_input('temp/conf', 'temp/script');
+
+			is_valid.should.equal(false);
+			messages.length.should.equal(1);
+			messages.should.contains('Unable to find file: temp/script');
+			mock.restore();
+		});
+
+		it('Should report that secret is missing in conf file', function() {
+			mock({
+				'temp': {
+					'conf': '{"wrong-attribute": "password"}', 
+					'script': ''
+				}
+			});
+
+			var { is_valid, messages } = helpers.validate_input('temp/conf', 'temp/script');
+
+			is_valid.should.equal(false);
+			messages.length.should.equal(1);
+			messages.should.contains('Secret not provided');
+			mock.restore();
+		});
 	});
 
 	describe('Test hash', function() {

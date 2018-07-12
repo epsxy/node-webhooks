@@ -37,15 +37,13 @@ logger.debug(`Will use conf file ${commander.conf}`);
 logger.debug(`Will trigger script ${commander.script}`);
 
 // Validation
-is_conf_valid = helpers.validate(commander.conf, 'Configuration file not provided');
-is_script_valid = helpers.validate(commander.script, 'Script file not provided');
+var { is_valid, messages } = helpers.validate_input(commander.conf, commander.script);
+if(!is_valid) {
+  logger.error('Input not valid: ' + messages.join(', '))
+  process.exit(1);
+}
 conf_file = require(commander.conf);
 secret = conf_file.secret;
-is_secret_valid = helpers.validate(secret, 'Secret not provided');
-
-if(!is_script_valid || !is_conf_valid || !is_secret_valid) {
-	process.exit(1);
-}
 
 var app = express();
 app.use( bodyParser.json() );
