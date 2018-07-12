@@ -1,6 +1,6 @@
-var logger = require('winston');
-var crypto = require('crypto');
-var fs = require('fs');
+const logger = require('winston');
+const crypto = require('crypto');
+const fs = require('fs');
 
 var exports = module.exports = {};
 

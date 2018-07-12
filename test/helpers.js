@@ -1,7 +1,7 @@
-var helpers = require('./../helpers.js');
-var should = require('chai').should();
-var expect = require('chai').expect();
-var mock = require('mock-fs');
+const helpers = require('./../helpers.js');
+const should = require('chai').should();
+const expect = require('chai').expect();
+const mock = require('mock-fs');
 
 describe('Test helpers', function() {
 	describe('Test string validation', function() {

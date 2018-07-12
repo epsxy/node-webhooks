@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-var express = require('express');
-var bodyParser = require('body-parser');
-var shell = require('shelljs');
-var path = require('path');
-var pkg = require(path.join(__dirname, 'package.json'));
-var logger = require('winston');
-var commander = require('commander');
-var helpers = require('./helpers.js');
+const express = require('express');
+const bodyParser = require('body-parser');
+const shell = require('shelljs');
+const path = require('path');
+const pkg = require(path.join(__dirname, 'package.json'));
+const logger = require('winston');
+const commander = require('commander');
+const helpers = require('./helpers.js');
 
 // Configure logger
 logger.remove(logger.transports.Console);
@@ -53,7 +53,7 @@ app.post(commander.route, function (req, res) {
   var hash = helpers.hash(JSON.stringify(req.body), secret);
 
   if(helpers.hashes_matches(hash, github_hash)) {
-	const { stdout, stderr, code } = shell.exec(commander.script, { silent: true });
+	var { stdout, stderr, code } = shell.exec(commander.script, { silent: true });
   	if(code !== 0) {
   		logger.error('500 - ' + stderr)
   		res.status(500).send('An error has occured while executing the script - ' + stderr)
