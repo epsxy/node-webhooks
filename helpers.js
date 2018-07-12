@@ -1,5 +1,6 @@
 var logger = require('winston');
 var crypto = require('crypto');
+var fs = require('fs');
 
 var exports = module.exports = {};
 
@@ -7,15 +8,48 @@ var exports = module.exports = {};
 * @function 
 * @name validate
 * @param {string} parameter - Input parameter to check
-* @param {string} message - Message to print if parameter is invalid
 * @returns {boolean} Return if parameter is valid or not
 **/
-exports.validate = function(parameter, error_message) {
-	if (parameter !== undefined && parameter !== '') {
-		return true;
+exports.validate = function(parameter) {
+	return parameter !== undefined && parameter !== '';
+}
+
+/**
+* @function 
+* @name validate_input
+* @param {string} conf - Input conf file parameter to check
+* @param {string} script - Input script file parameter to check
+* @returns {boolean, Array.<string>} - is_valid: boolean which indicates if it's valid or not, messages: error messages
+**/
+exports.validate_input = function(conf, script) {
+	error_msg = [];
+	is_conf_valid = this.validate(conf);
+	if(!is_conf_valid) {
+	  error_msg.push('Configuration file not provided')
 	} else {
-		logger.error(error_message);
-		return false;
+		if(fs.existsSync(conf)) {
+			content = fs.readFileSync(conf)
+			conf_file = JSON.parse(content);
+			secret = conf_file.secret;
+			is_secret_valid = this.validate(secret);
+			if(!is_secret_valid) {
+			  error_msg.push('Secret not provided')
+			}
+		} else {
+			error_msg.push('Unable to find file: ' + conf);
+		}
+	}
+	is_script_valid = this.validate(script);
+	if(!is_script_valid) {
+	  error_msg.push('Script file not provided');
+	} else {
+		if(!fs.existsSync(script)) {
+			error_msg.push('Unable to find file: ' + script);
+		}
+	}
+	return {
+		is_valid: error_msg.length == 0, 
+		messages: error_msg
 	}
 }
 
@@ -29,7 +63,7 @@ exports.validate = function(parameter, error_message) {
 exports.hash = function(stringified_body, secret) {
 	hash = crypto.createHmac('sha1', secret)
 					.update(stringified_body)
-					.digest('hex')
+					.digest('hex');
 
 	return 'sha1=' + hash;
 }
