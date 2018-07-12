@@ -4,7 +4,7 @@
   "description": "Nodejs server for github webhooks",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./node_modules/mocha/bin/mocha"
   },
   "author": "",
   "license": "ISC",
@@ -13,7 +13,12 @@
     "commander": "^2.16.0",
     "crypto": "^1.0.1",
     "express": "^4.16.3",
+    "npm": "^6.1.0",
     "shelljs": "^0.8.2",
     "winston": "^2.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
   }
 }
