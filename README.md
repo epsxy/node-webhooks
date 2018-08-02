@@ -9,6 +9,12 @@ Securely use github webhooks. Node server to listen on a spefic port/route. Chec
 npm install
 ```
 
+## Testing
+
+```
+npm test
+```
+
 ## Usage
 
 ```
